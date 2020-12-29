@@ -1,0 +1,15 @@
+{
+    "Menu": {
+        "All Items": "All Items",
+        "Favorites": "Favorites",
+        "Folders": "Folders",
+        "Create Folder": "Create Folder"
+    },
+    "Services": {
+        "Search in Services": "Search in Services"
+    },
+    "Service": {
+        "Edit": "Edit",
+        "Delete": "Delete"
+    }
+}
