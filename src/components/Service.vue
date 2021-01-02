@@ -5,9 +5,21 @@
         <div class="service-toolbar">
 
             <!-- Edit -->
-            <button class="service-toolbar-button">
+            <button class="service-toolbar-button" @click="editService()" v-show="!edit">
                 <md-create class="service-toolbar-button-icon"></md-create>
                 <span class="service-toolbar-button-title">{{ $t('Service.Edit') }}</span>
+            </button>
+
+            <!-- Save -->
+            <button class="service-toolbar-button button-accept" @click="saveService()" v-show="edit">
+                <md-checkmark class="service-toolbar-button-icon"></md-checkmark>
+                <span class="service-toolbar-button-title">{{ $t('Service.Save') }}</span>
+            </button>
+
+            <!-- Cancel -->
+            <button class="service-toolbar-button button-decline" @click="edit = false" v-show="edit">
+                <md-close class="service-toolbar-button-icon"></md-close>
+                <span class="service-toolbar-button-title">{{ $t('Service.Cancel') }}</span>
             </button>
 
             <!-- Delete -->
@@ -17,64 +29,73 @@
             </button>
         </div>
 
-        <!-- Header -->
-        <div class="service-header">
-            <div class="service-header-icon">
-                <img :src="'/icons/' + currentService.icon + '.png'" alt="">
-            </div>
-
-            {{ currentService }}
-
-            <div class="service-header-title-section">
-                <div class="service-header-title">{{ currentService.title }}</div>
-                <div class="service-header-type">{{ currentService.type }}</div>
-            </div>
-
-            <div class="service-header-favorite" @click="toggleServiceFavorite(currentService)">
-                <md-star v-if="currentService.favorite" class="service-header-favorite-icon" w="32px" h="32px"></md-star>
-                <md-star-outline v-else class="service-header-favorite-icon" w="32px" h="32px"></md-star-outline>
-            </div>
-        </div>
-
-        <!-- Body -->
-        <div class="service-body">
+        <transition name="fade" mode="out-in">
             
-            <div class="input-block">
+            <keep-alive max="2">
+                <div :key="$route.params.serviceId">
 
-                <div class="input-section">
-                    <label>Username</label>
-                    <div class="input">
-                        <input type="text" placeholder="username@username.com" disabled>
+                    <!-- Header -->
+                    <div class="service-header">
+                        <div class="service-header-icon">
+                            <img :src="'/icons/' + currentService.icon + '.png'" alt="">
+                        </div>
+
+                        <div class="service-header-title-section">
+                            <div class="service-header-title">{{ currentService.title }}</div>
+                            <div class="service-header-type">{{ currentService.type }}</div>
+                        </div>
+
+                        <div class="service-header-favorite" @click="toggleServiceFavorite(currentService)">
+                            <md-star v-if="currentService.favorite" class="service-header-favorite-icon" w="32px" h="32px"></md-star>
+                            <md-star-outline v-else class="service-header-favorite-icon" w="32px" h="32px"></md-star-outline>
+                        </div>
                     </div>
-                </div>
 
-                <div class="input-actions">
-                    <md-copy class="input-action" w="20px" h="20px"></md-copy>
-                </div>
-            </div>
+                    <!-- Body -->
+                    <div class="service-body">
+                        
+                        <div class="input-block">
 
-            <div class="input-block">
+                            <div class="input-section">
+                                <label>Username</label>
+                                <div class="input">
+                                    <input type="text" placeholder="username@username.com" :disabled="!edit">
+                                </div>
+                            </div>
 
-                <div class="input-section">
-                    <label>Password</label>
-                    <div class="input">
-                        <input type="password" placeholder="password" disabled>
+                            <div class="input-actions" v-show="!edit">
+                                <md-copy class="input-action" w="20px" h="20px"></md-copy>
+                            </div>
+                        </div>
+
+                        <div class="input-block">
+
+                            <div class="input-section">
+                                <label>Password</label>
+                                <div class="input">
+                                    <input type="password" placeholder="password" :disabled="!edit">
+                                </div>
+                            </div>
+
+                            <div class="input-actions" v-show="!edit">
+                                <md-eye class="input-action" w="20px" h="20px"></md-eye>
+                                <md-copy class="input-action" w="20px" h="20px"></md-copy>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
 
-                <div class="input-actions">
-                    <md-eye class="input-action" w="20px" h="20px"></md-eye>
-                    <md-copy class="input-action" w="20px" h="20px"></md-copy>
                 </div>
-            </div>
+            </keep-alive>
 
-        </div>
+        </transition>
 
     </div>
 </template>
 
 <script>
 import { mapMutations, mapState } from 'vuex';
+import { IService } from '@/store/service';
 
 import MdCreate from 'vue-ionicons/dist/md-create.vue';
 import MdTrash from 'vue-ionicons/dist/md-trash.vue';
@@ -82,6 +103,13 @@ import MdStar from 'vue-ionicons/dist/md-star.vue';
 import MdStarOutline from 'vue-ionicons/dist/md-star-outline.vue';
 import MdCopy from 'vue-ionicons/dist/md-copy.vue';
 import MdEye from 'vue-ionicons/dist/md-eye.vue';
+import MdCheckmark from 'vue-ionicons/dist/md-checkmark.vue';
+import MdClose from 'vue-ionicons/dist/md-close.vue';
+
+import Permission from './Permission.vue';
+
+import { Vue } from 'vue-class-component'
+import Component from 'vue-class-component';
 
 export default {
     components: {
@@ -90,13 +118,25 @@ export default {
         MdStar,
         MdStarOutline,
         MdCopy,
-        MdEye
+        MdEye,
+        MdCheckmark,
+        MdClose,
+        Permission
+    },
+    data() {
+        return {
+            edit: false,
+        }
     },
     computed: {
         ...mapState('service', ['currentService'])
     },
     methods: {
-        ...mapMutations('service', ['toggleServiceFavorite'])
+        ...mapMutations('service', ['toggleServiceFavorite']),
+
+        editService() {
+            this.edit = true;
+        }
     }
 }
 </script>
@@ -104,7 +144,15 @@ export default {
 <style lang="scss" scoped>
 @import '../assets/_variables.scss';
 
-$color-button-background: #292929;
+/* Animation */
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+  transform: translateX(4em);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: all .3s ease-in;
+}
 
 .service {
     flex: 1;
@@ -122,16 +170,13 @@ $color-button-background: #292929;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: $color-button-background;
-            color: $color-text-prm;
-            transition: all $transition-time;
-            border-radius: $border-radius;
             height: 31px;
             color: $color-text-sec;
             outline: none;
             border: 0;
             margin-left: 8px;
             padding: 0 8px;
+            cursor: pointer;
 
             .service-toolbar-button-icon {
                 font-size: 16px;
@@ -142,15 +187,9 @@ $color-button-background: #292929;
                 margin-left: 4px;
                 font-size: 14px;
                 line-height: 31px;
-
                 padding-top: 2px;
             }
 
-            &:hover {
-                background-color: $color-prm;
-                color: $color-text-prm;
-                cursor: pointer;
-            }
         }
     }
 
@@ -291,6 +330,7 @@ $color-button-background: #292929;
             outline: none;
             border-radius: $border-radius;
             background-color: $color-input-background;
+            transition: all $transition-time;
 
             &:disabled {
                 background-color: transparent;

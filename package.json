@@ -7,16 +7,20 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "file-loader": "^4.3.0",
     "ionicons": "^5.2.3",
     "register-service-worker": "^1.7.1",
+    "svg-loader": "^0.0.2",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
     "vue-i18n": "^8.22.2",
     "vue-ionicons": "^3.0.5",
     "vue-loader": "^15.9.6",
+    "vue-property-decorator": "^9.1.2",
     "vue-router": "^4.0.0-0",
     "vue3-i18n": "^1.0.1",
-    "vuex": "^4.0.0-0"
+    "vuex": "^4.0.0-0",
+    "webfonts-loader": "^7.1.0"
   },
   "devDependencies": {
     "@types/vue-i18n": "^7.0.0",
@@ -28,6 +32,7 @@
     "@vue/compiler-sfc": "^3.0.0",
     "add": "^2.0.6",
     "node-sass": "^5.0.0",
+    "resolve-url-loader": "^3.1.2",
     "sass": "^1.30.0",
     "sass-loader": "^10.1.0",
     "typescript": "~3.9.3"

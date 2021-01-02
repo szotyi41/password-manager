@@ -1,7 +1,17 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
-import Home from '../views/Home.vue'
+import Service from '@/components/Service.vue';
 
 const routes: Array<RouteRecordRaw> = [
+  {
+    path: '/:serviceId',
+    name: 'Service',
+    component: Service
+  },
+  {
+    path: '/',
+    name: 'Home',
+    component: Service
+  }
   /* {
     path: '/',
     name: 'Home',

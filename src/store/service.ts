@@ -13,6 +13,9 @@ export interface IService {
     notes?: String;
     icon?: String;
     infolder?: Array<String>;
+
+    edit?: Boolean;
+    opened?: Boolean;
 }
 
 export interface IApacheService extends IService {
@@ -29,7 +32,7 @@ export interface IServiceState {
     folders: Array<IFolder>;
     services: Array<IService>;
     currentService: IService;
-    dragService: IService;
+    dragService: IService | null;
 }
 
 export const DefaultServiceState: IServiceState = {
@@ -42,7 +45,7 @@ export const DefaultServiceState: IServiceState = {
         {id: '2', title: 'Gitlab', type: 'gitlab', icon: 'gitlab', favorite: false, infolder: []}
     ],
     currentService: {},
-    dragService: {}
+    dragService: null
 }
 
 const ServiceStore: Module<any, any> = {
@@ -51,27 +54,25 @@ const ServiceStore: Module<any, any> = {
     getters: {},
     mutations: {
         setCurrentService(state: IServiceState, service: IService) {
+            state.services = state.services.map((service: IService): IService => ({...service, opened: false}));
+            service.opened = true;
             state.currentService = service;
+            this.commit('service/setService', service);
         },
         setDragService(state: IServiceState, service: IService) {
             state.dragService = service;
         },
         toggleServiceFavorite(state: IServiceState, service: IService) {
-            const index = state.services.map((s: IService) => s.id).indexOf(service.id);
             service = { ...service, favorite: !service.favorite };
-            
-            state.services[index] = service;
-            
-            if (state.currentService.id == service.id) {
-                state.currentService = { ...service, favorite: !service.favorite };
-            }
+            this.commit('service/setService', service);
         },
         putServiceToFolder(state: IServiceState, { service, folderId }) {
+            service = {...service, infolder: [...service.infolder, folderId]};
+            this.commit('service/setService', service);
+        },
+        setService(state: IServiceState, service: IService) {
             const index = state.services.map((s: IService) => s.id).indexOf(service.id);
-            service.infolder.push(folderId);
-
-            state.services[index] = service; 
-
+            state.services[index] = service;
             if (state.currentService.id == service.id) {
                 state.currentService = service;
             }

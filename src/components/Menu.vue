@@ -29,7 +29,7 @@
 
             <!-- Folders -->
             <div class="menu-item folder" 
-                :class="{'drag-start': dragService}" 
+                :class="{'drag-start': dragService !== null}" 
                 v-for="(folder, folderIndex) in foldersFiltered"
                 :key="folderIndex"
                 :folder-id="folder.id"
@@ -43,9 +43,31 @@
             </div>
 
             <!-- Add folder -->
-            <div class="menu-item">
+            <div class="menu-item create-folder" :class="{'folder-creating': createFolder}">
+
                 <md-add class="menu-icon" w="18" h="18"></md-add>
-                <div class="menu-title">{{ $t('Menu.Create Folder') }}</div>
+                <div class="menu-title" 
+                    @click="createFolder = true; $refs.createFolder.focus()" 
+                    v-show="!createFolder">
+                    {{ $t('Menu.Create Folder') }}
+                </div>
+
+                <!-- Create Folder -->
+                <div class="menu-create-folder" v-show="createFolder">
+                    <input type="text" 
+                        ref="createFolder"
+                        class="menu-create-folder-input"
+                        :placeholder="$t('Menu.Folder Name')"/>
+
+                    <button class="menu-create-folder-button button-accept">
+                        <md-checkmark class="menu-create-folder-button-icon"></md-checkmark>
+                    </button>
+
+                    <button class="menu-create-folder-button button-decline" @click="createFolder = false">
+                        <md-close class="menu-create-folder-button-icon"></md-close>
+                    </button>
+                </div>
+
             </div>
 
         </div>
@@ -56,7 +78,10 @@
 
 <script>
 import { mapState } from 'vuex';
+import { IFolder, IService } from '@/store/service';
 
+import MdCheckmark from 'vue-ionicons/dist/md-checkmark.vue';
+import MdClose from 'vue-ionicons/dist/md-close.vue';
 import MdStar from 'vue-ionicons/dist/md-star.vue'
 import MdAlbums from 'vue-ionicons/dist/md-albums.vue';
 import MdFolder from 'vue-ionicons/dist/md-folder.vue';
@@ -67,7 +92,14 @@ export default {
         MdStar,
         MdAlbums,
         MdFolder,
-        MdAdd
+        MdAdd,
+        MdCheckmark,
+        MdClose
+    },
+    data() {
+        return {
+            createFolder: false
+        }
     },
     computed: {
         ...mapState('service', ['services', 'folders', 'dragService']),
@@ -76,14 +108,14 @@ export default {
             return this.services.length;
         },
         favoriteServicesNumber() {
-            return this.services.reduce((count, service) => count + service.favorite, 0);
+            return this.services.reduce((count, service) => count + (service.favorite), 0);
         },
         foldersFiltered() {
-            return this.folders.map(folder => {
+            return this.folders.map((folder) => {
                 return { 
                     ...folder, 
                     items: this.services.reduce((count, service) => count + service.infolder.includes(folder.id), 0)
-                };
+                }
             });
         }
     },
@@ -155,9 +187,9 @@ export default {
                 border: 2px solid $color-background;
             }
 
-            &:hover:not(.drag-start):not(.drag-enter) {
+            &:hover:not(.drag-start):not(.drag-enter):not(.folder-creating) {
                 background-color: $color-prm;
-                color: $color-hover-text;
+                color: $color-text-hover;
                 box-shadow: $box-shadow;
                 cursor: pointer;
 
@@ -167,7 +199,7 @@ export default {
             }
 
             .menu-icon {
-                margin-top: 2px;
+                margin-top: 0px;
                 color: $color-text-prm;
             }
 
@@ -197,6 +229,33 @@ export default {
 
                 &.hidden {
                     opacity: 0;
+                }
+            }
+
+            .menu-create-folder {
+                display: flex;
+                width: 100%;
+
+                .menu-create-folder-input {
+                    flex: 1;
+                    background-color: #404040;
+                    font-size: $font-size-p1;
+                    border-radius: 6px;
+                    border-radius: 6px;
+                    margin-left: 4px;
+                    border: 0;
+                    padding: 4px;
+                    color: #fff;
+                    outline: none;
+                }
+
+                .menu-create-folder-button {
+                    width: 32px;
+                    margin-left: 8px;
+
+                    .menu-create-folder-button-icon {
+                        font-size: 12px;
+                    }
                 }
             }
 

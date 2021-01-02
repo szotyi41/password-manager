@@ -7,9 +7,10 @@ export default {
     let itemHeight = items.length ? items[0].offsetHeight : '';
     while (++i < items.length) {
       const item = items[i];
+      const style = item.currentStyle || window.getComputedStyle(item);
       item.style.position = 'absolute';
       item.style.opacity = 1;
-      item.style[transform] = 'translateY(' + position++ * itemHeight + 'px)';
+      item.style[transform] = 'translateY(' + position++ * (itemHeight + parseInt(style.marginBottom)) + 'px)';
     }
   },
   updated(el, binding) {
@@ -20,8 +21,9 @@ export default {
     let itemHeight = items.length ? items[0].offsetHeight : '';
     while (++i < items.length) {
         const item = items[i];
+        const style = item.currentStyle || window.getComputedStyle(item);
         if (item.className.includes('show')) {
-            item.style[transform] = 'translateY(' + position++ * itemHeight + 'px)';
+            item.style[transform] = 'translateY(' + position++ * (itemHeight + parseInt(style.marginBottom)) + 'px)';
             item.style.opacity = 1;
         } else {
             item.style.opacity = 0;

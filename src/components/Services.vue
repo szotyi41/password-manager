@@ -21,8 +21,8 @@
         <!-- List -->
         <div class="services-list" v-animated-filter="searchText">
 
-            <div class="service-card" 
-                :class="{show: service.show}" 
+            <div class="service-card draggable" 
+                :class="{show: service.show, opened: service.opened}" 
                 v-for="(service, serviceIndex) in servicesFiltered" 
                 :key="serviceIndex"
                 @click="openService(service)"
@@ -78,13 +78,14 @@ export default {
     },
     methods: {
         openService(service) {
+            this.$router.push('/' + service.id);
             this.$store.commit('service/setCurrentService', service);
         },
         serviceDragStart(service) {
             this.$store.commit('service/setDragService', service);
         },
         serviceDragEnd() {
-            //this.$nextTick(() => this.$store.commit('service/setDragService', null));
+            this.$nextTick(() => this.$store.commit('service/setDragService', null));
         }
     }
 }
@@ -188,6 +189,12 @@ $services-header-height: 64px;
             margin-bottom: 8px;
             opacity: 0;
 
+            &:hover, &.opened {
+                background-color: $color-prm;
+                box-shadow: $box-shadow;
+                cursor: pointer;
+            }
+
             .service-icon {
                 display: flex;
                 width: 64px;
@@ -225,11 +232,6 @@ $services-header-height: 64px;
                 }
             }
 
-            &:hover {
-                background-color: $color-prm;
-                box-shadow: $box-shadow;
-                cursor: pointer;
-            }
         }
     }
 }

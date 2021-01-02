@@ -3,7 +3,7 @@
     <Menu></Menu>
     <Services></Services>
     <Service></Service>
-    <router-view/>
+    
   </div>
 </template>
 
@@ -17,6 +17,12 @@ export default {
     Menu,
     Services,
     Service
+  },
+  data() {return{r: false}},
+  watch: {
+    $route: function() {
+      console.log(this.$route);
+    }
   }
   
 }
@@ -31,9 +37,12 @@ html, body {
   user-select: none;
   overflow: hidden;
   letter-spacing: .2px;
+  background-color: $color-background;
 }
 
 .app {
   display: flex;
+  overflow: hidden;
+  width: 100vw;
 }
 </style>

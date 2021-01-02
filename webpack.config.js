@@ -1,17 +1,22 @@
 module.exports = {
     module: {
       rules: [
-        // ... other rules omitted
-  
-        // this will apply to both plain `.scss` files
-        // AND `<style lang="scss">` blocks in `.vue` files
+        {
+          test: /\.svg$/,
+          use: ['svg-loader']
+        },
         {
           test: /\.scss$/,
           use: [
             'vue-style-loader',
             'css-loader',
+            'resolve-url-loader',
             'sass-loader'
           ]
+        },
+        {
+          test: /\.(woff|ttf|otf|eot|woff2|svg)$/i,
+          loader: 'file-loader'
         }
       ]
     },
