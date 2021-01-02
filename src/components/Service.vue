@@ -54,10 +54,11 @@
                     <!-- Body -->
                     <div class="service-body">
                         
+                        <!-- Username -->
                         <div class="input-block">
 
                             <div class="input-section">
-                                <label>Username</label>
+                                <label>{{ $t('Service.Username') }}</label>
                                 <div class="input">
                                     <input type="text" placeholder="username@username.com" :disabled="!edit">
                                 </div>
@@ -68,10 +69,11 @@
                             </div>
                         </div>
 
+                        <!-- Password -->
                         <div class="input-block">
 
                             <div class="input-section">
-                                <label>Password</label>
+                                <label>{{ $t('Service.Password') }}</label>
                                 <div class="input">
                                     <input type="password" placeholder="password" :disabled="!edit">
                                 </div>
@@ -79,7 +81,30 @@
 
                             <div class="input-actions" v-show="!edit">
                                 <md-eye class="input-action" w="20px" h="20px"></md-eye>
-                                <md-copy class="input-action" w="20px" h="20px"></md-copy>
+                                <md-copy class="input-action" 
+                                    w="20px" 
+                                    h="20px" 
+                                    v-clipboard:success="success"
+                                    v-clipboard:copy="'password'">
+                                </md-copy>
+                            </div>
+                        </div>
+
+                        <!-- Add Field -->
+                        <div class="input-block" v-if="edit">
+                            <div class="add-field" v-if="addingFieldToggle">
+                                <select v-model="addingFieldType">
+                                    <option value="">{{ $t('Service.Select service type') }}</option>
+                                    <option v-for="(type, typeIndex) in types" 
+                                        :value="type.name" 
+                                        :key="typeIndex">
+                                        {{ type.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="add-field" v-else @click="addingFieldToggle = true">
+                                <md-add w="18" h="18"></md-add>
+                                <span>{{ $t('Service.Add Field') }}</span>
                             </div>
                         </div>
 
@@ -105,6 +130,7 @@ import MdCopy from 'vue-ionicons/dist/md-copy.vue';
 import MdEye from 'vue-ionicons/dist/md-eye.vue';
 import MdCheckmark from 'vue-ionicons/dist/md-checkmark.vue';
 import MdClose from 'vue-ionicons/dist/md-close.vue';
+import MdAdd from 'vue-ionicons/dist/md-add.vue';
 
 import Permission from './Permission.vue';
 
@@ -121,11 +147,14 @@ export default {
         MdEye,
         MdCheckmark,
         MdClose,
-        Permission
+        MdAdd,
+        Permission,
     },
     data() {
         return {
             edit: false,
+            addingFieldToggle: false,
+            addingFieldType: ''
         }
     },
     computed: {
@@ -136,6 +165,9 @@ export default {
 
         editService() {
             this.edit = true;
+        },
+        success(event) {
+            event.trigger.classList.add('success');
         }
     }
 }
@@ -171,7 +203,6 @@ export default {
             justify-content: center;
             align-items: center;
             height: 31px;
-            color: $color-text-sec;
             outline: none;
             border: 0;
             margin-left: 8px;
@@ -284,7 +315,7 @@ export default {
             border-radius: 50%;
             transition: all $transition-time;
 
-            &:hover {
+            &:hover, &:focus {
                 background-color: $color-input-background;
                 cursor: pointer;
             }
@@ -337,6 +368,23 @@ export default {
             }
         }
 
+    }
+
+    /* Add field */
+    &.add-field {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        text-align: left;
+        justify-content: left;
+        color: $color-text-sec;
+        cursor: pointer;
+
+        span {
+            margin-left: 8px;
+            color: $color-text-sec;
+            font-size: $font-size-p1;
+        }
     }
 }
 </style>

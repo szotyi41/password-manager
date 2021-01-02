@@ -1,0 +1,42 @@
+{
+    "Menu": {
+        "All Items": "Minden elem",
+        "Favorites": "Kedvencek",
+        "Folders": "Mappák",
+        "Create Folder": "Mappa Hozzáadása",
+        "Folder Name": "Mappa Neve"
+    },
+    "Services": {
+        "Search in Services": "Keresés szolgáltatások között"
+    },
+    "Service": {
+        "Edit": "Szerkesztés",
+        "Delete": "Törlés",
+        "Save": "Mentés",
+        "Cancel": "Mégsem",
+        "Username": "Felhasználónév",
+        "Password": "Jelszó",
+        "Local IP": "Helyi IP-cím",
+        "Global IP": "Külső IP-cím",
+        "Host": "Host",
+        "Port": "Port",
+        "Bucket": "Bucket",
+        "Command": "Parancs",
+        "Address": "Cím",
+        "Repository": "Tároló",
+        "Version": "Verziószám",
+        "Key": "Kulcs",
+        "Secret": "Secret",
+        "Database": "Adatbázis",
+        "PFSense": "PFSense",
+        "Physical Machine": "Fizikai Gép",
+        "Aliases": "Aliasok",
+        "Files": "Csatolt fájlok",
+        "Owners": "Tulajdonosok",
+        "Add Field": "Bevitelimező felvétele",
+        "Select service type": "Szolgáltatás típus"
+    },
+    "Permission": {
+        "Do you need access to edit this service?": "Do you need access to edit this service?"
+    }
+}

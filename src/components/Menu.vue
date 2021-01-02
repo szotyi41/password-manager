@@ -38,32 +38,35 @@
                 @dragleave="onDragLeave($event)"
                 @drop="onDrop($event)">
                 <md-folder class="menu-icon" w="18" h="18"></md-folder>
-                <div class="menu-title">{{ folder.title }}</div>
-                <div class="menu-label">{{ folder.items }}</div>
+                <div class="menu-title">{{ folder.name }}</div>
+                <div class="menu-label" v-if="folder.items">{{ folder.items }}</div>
             </div>
 
             <!-- Add folder -->
-            <div class="menu-item create-folder" :class="{'folder-creating': createFolder}">
+            <div class="menu-item create-folder" :class="{'folder-creating': createFolderToggle}">
 
                 <md-add class="menu-icon" w="18" h="18"></md-add>
                 <div class="menu-title" 
-                    @click="createFolder = true; $refs.createFolder.focus()" 
-                    v-show="!createFolder">
+                    @click="createFolderToggle = true; $refs.createFolder.focus()" 
+                    v-show="!createFolderToggle">
                     {{ $t('Menu.Create Folder') }}
                 </div>
 
                 <!-- Create Folder -->
-                <div class="menu-create-folder" v-show="createFolder">
+                <div class="menu-create-folder" v-show="createFolderToggle">
                     <input type="text" 
+                        v-model="folderName"
                         ref="createFolder"
                         class="menu-create-folder-input"
                         :placeholder="$t('Menu.Folder Name')"/>
 
-                    <button class="menu-create-folder-button button-accept">
+                    <!-- Save button -->
+                    <button class="menu-create-folder-button button-accept" @click="createFolder(folderName)">
                         <md-checkmark class="menu-create-folder-button-icon"></md-checkmark>
                     </button>
 
-                    <button class="menu-create-folder-button button-decline" @click="createFolder = false">
+                    <!-- Close button -->
+                    <button class="menu-create-folder-button button-decline" @click="createFolderToggle = false">
                         <md-close class="menu-create-folder-button-icon"></md-close>
                     </button>
                 </div>
@@ -98,7 +101,8 @@ export default {
     },
     data() {
         return {
-            createFolder: false
+            createFolderToggle: false,
+            folderName: ''
         }
     },
     computed: {
@@ -134,6 +138,12 @@ export default {
             const folderId = event.target.getAttribute('folder-id');
             this.$store.dispatch('service/putServiceToFolder', folderId);
         },
+
+        createFolder(folderName) {
+            this.folderName = '';
+            this.createFolderToggle = false;
+            this.$store.dispatch('service/createFolder', folderName);
+        }
     }
 }
 </script>

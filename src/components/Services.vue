@@ -12,7 +12,7 @@
             </div>
 
             <div class="services-add">
-                <button class="services-add-button">
+                <button class="services-add-button" @click="createService()">
                     <md-add w="18" h="18"></md-add>
                 </button>
             </div>
@@ -81,6 +81,15 @@ export default {
             this.$router.push('/' + service.id);
             this.$store.commit('service/setCurrentService', service);
         },
+        createService() {
+            const service = {
+                id: 1,
+                title: ''
+            };
+            this.$store.commit('service/setCurrentService', service);
+        },
+
+        // Drag
         serviceDragStart(service) {
             this.$store.commit('service/setDragService', service);
         },

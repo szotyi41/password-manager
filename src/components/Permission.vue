@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import { IService } from '@/store/service'
+import { IService } from '@/store/models/service'
 
 export default {
     methods: {
