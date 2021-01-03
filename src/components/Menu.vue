@@ -189,6 +189,8 @@ export default {
             box-shadow: $box-shadow-none;
             border: 2px solid transparent;
 
+            @extend .on-click-animation;
+
             &.drag-start {
                 border: 2px dashed $color-background;
             }

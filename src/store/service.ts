@@ -14,8 +14,8 @@ export interface IServiceState {
 export const DefaultServiceState: IServiceState = {
     types: [
         { name: 'apache2' },
-        { name: 'htaccess', fields: {username: {default: []}, password: {default: []}} },
-        { name: 'mongodb', fields: {username: {default: []}} },
+        { name: 'htaccess' },
+        { name: 'mongodb' },
         { name: 'gitlab' },
         { name: 'git' }
     ],

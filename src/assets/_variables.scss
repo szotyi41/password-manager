@@ -34,6 +34,9 @@ $border-radius: 6px;
 $box-shadow-none: 0px 4px 10px 0px rgba(20,20,20,0);
 $box-shadow: 0px 4px 10px 0px rgba(20,20,20,0.2);
 
+.draggable {
+  cursor: move;
+}
 
 .text-overflow {
   overflow: hidden;
@@ -41,20 +44,50 @@ $box-shadow: 0px 4px 10px 0px rgba(20,20,20,0.2);
   white-space: nowrap
 }
 
-.draggable {
-  cursor: move;
+.on-click-animation {
+  position: relative;
+  overflow: hidden;
+
+  &:before {
+    content: '';
+    background-color: $color-button-background;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    padding-left: 100%;
+    opacity: 0;
+    transition: all 0.6s;
+  }
+  
+  &:active:before {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s;
+  }
 }
 
 button {
+  position: relative;
   outline: none;
   border: none;
   cursor: pointer;
-
-  background-color: $color-button-background;
-  color: $color-text-prm;
   transition: all $transition-time;
   border-radius: $border-radius;
 
+  /* Default settings */
+  background-color: $color-button-background;
+  color: $color-text-prm;
+
+  /* Text overflow ellipsis */
+  @extend .text-overflow;
+  
+  /* Animation on click */
+  @extend .on-click-animation;
+
+  /* Hover */
   &:hover {
     background-color: $color-prm;
     color: $color-text-prm;
@@ -68,6 +101,10 @@ button {
           background-color: $color-accept-hover;
           color: $color-text-prm;
       }
+
+      &:after {
+        background-color: $color-accept;
+      }
   }
 
   &.button-decline {
@@ -77,6 +114,10 @@ button {
       &:hover, &:focus {
           background-color: $color-decline-hover;
           color: $color-text-prm;
+      }
+
+      &:after {
+        background-color: $color-decline;
       }
   }
 }

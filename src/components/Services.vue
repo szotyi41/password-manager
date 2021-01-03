@@ -147,6 +147,8 @@ $services-header-height: 64px;
                 padding: 8px;
                 color: $color-text-prm;
                 outline: none;
+
+                @extend .on-click-animation;
             }
         }
 

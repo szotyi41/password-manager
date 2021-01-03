@@ -46,7 +46,7 @@
                         </div>
 
                         <div class="service-header-favorite" @click="toggleServiceFavorite(currentService)">
-                            <md-star v-if="currentService.favorite" class="service-header-favorite-icon" w="32px" h="32px"></md-star>
+                            <md-star v-if="currentService.favorite" class="service-header-favorite-icon on-click-animation" w="32px" h="32px"></md-star>
                             <md-star-outline v-else class="service-header-favorite-icon" w="32px" h="32px"></md-star-outline>
                         </div>
                     </div>
@@ -92,6 +92,8 @@
 
                         <!-- Add Field -->
                         <div class="input-block" v-if="edit">
+
+                            <!-- Select type -->
                             <div class="add-field" v-if="addingFieldToggle">
                                 <select v-model="addingFieldType">
                                     <option value="">{{ $t('Service.Select service type') }}</option>
@@ -102,6 +104,8 @@
                                     </option>
                                 </select>
                             </div>
+
+                            <!-- Add -->
                             <div class="add-field" v-else @click="addingFieldToggle = true">
                                 <md-add w="18" h="18"></md-add>
                                 <span>{{ $t('Service.Add Field') }}</span>
@@ -371,7 +375,7 @@ export default {
     }
 
     /* Add field */
-    &.add-field {
+    .add-field {
         display: flex;
         height: 100%;
         align-items: center;
