@@ -7,9 +7,12 @@
         "Folder Name": "Folder Name"
     },
     "Services": {
-        "Search in Services": "Search in Services"
+        "Search in Services": "Search in Services",
+        "There are no services added yet": "There are no services added yet",
+        "Service not found {0}": "Service not found {0}" 
     },
     "Service": {
+        "Service Title": "Service Title",
         "Edit": "Edit",
         "Delete": "Delete",
         "Save": "Save",
@@ -34,7 +37,10 @@
         "Files": "Files",
         "Owners": "Owners",
         "Add Field": "Add Field",
-        "Select service type": "Select service type"
+        "Select service type": "Select service type",
+        "Service Type": "Service Type",
+        "Field Type": "Field Type",
+        "Select field type": "Select field type"
     },
     "Permission": {
         "Do you need access to edit this service?": "Do you need access to edit this service?"

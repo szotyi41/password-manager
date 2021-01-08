@@ -7,9 +7,12 @@
         "Folder Name": "Mappa Neve"
     },
     "Services": {
-        "Search in Services": "Keresés szolgáltatások között"
+        "Search in Services": "Keresés szolgáltatások között",
+        "There are no services added yet": "Még nincs hozzáadva szolgáltatás",
+        "Service not found {0}": "{0} szolgáltatás nem található" 
     },
     "Service": {
+        "Service Title": "Szolgáltatás neve",
         "Edit": "Szerkesztés",
         "Delete": "Törlés",
         "Save": "Mentés",
@@ -34,7 +37,10 @@
         "Files": "Csatolt fájlok",
         "Owners": "Tulajdonosok",
         "Add Field": "Bevitelimező felvétele",
-        "Select service type": "Szolgáltatás típusa"
+        "Select service type": "Szolgáltatás típusa",
+        "Service Type": "Szolgáltatás típusa",
+        "Field Type": "Mező típusa",
+        "Select field type": "Mező típusa"
     },
     "Permission": {
         "Do you need access to edit this service?": "Do you need access to edit this service?"

@@ -5,25 +5,25 @@
         <div class="service-toolbar">
 
             <!-- Edit -->
-            <button class="service-toolbar-button" @click="editService()" v-show="!edit">
+            <button class="service-toolbar-button" @click="editService(currentService)" v-show="!edit">
                 <md-create class="service-toolbar-button-icon"></md-create>
                 <span class="service-toolbar-button-title">{{ $t('Service.Edit') }}</span>
             </button>
 
             <!-- Save -->
-            <button class="service-toolbar-button button-accept" @click="saveService()" v-show="edit">
+            <button class="service-toolbar-button button-accept" @click="saveService(currentService)" v-show="edit">
                 <md-checkmark class="service-toolbar-button-icon"></md-checkmark>
                 <span class="service-toolbar-button-title">{{ $t('Service.Save') }}</span>
             </button>
 
             <!-- Cancel -->
-            <button class="service-toolbar-button button-decline" @click="edit = false" v-show="edit">
+            <button class="service-toolbar-button button-decline" @click="revertService(currentService)" v-show="edit">
                 <md-close class="service-toolbar-button-icon"></md-close>
                 <span class="service-toolbar-button-title">{{ $t('Service.Cancel') }}</span>
             </button>
 
             <!-- Delete -->
-            <button class="service-toolbar-button">
+            <button class="service-toolbar-button" @click="removeService(currentService)">
                 <md-trash class="service-toolbar-button-icon"></md-trash>
                 <span class="service-toolbar-button-title">{{ $t('Service.Delete') }}</span>
             </button>
@@ -45,7 +45,7 @@
                             <div class="service-header-type">{{ currentService.type }}</div>
                         </div>
 
-                        <div class="service-header-favorite" @click="toggleServiceFavorite(currentService)">
+                        <div class="service-header-favorite" @click="favoriteService(currentService)">
                             <md-star v-if="currentService.favorite" class="service-header-favorite-icon on-click-animation" w="32px" h="32px"></md-star>
                             <md-star-outline v-else class="service-header-favorite-icon" w="32px" h="32px"></md-star-outline>
                         </div>
@@ -53,14 +53,47 @@
 
                     <!-- Body -->
                     <div class="service-body">
+
+                        <!-- Title -->
+                        <div class="input-block hover">
+                            <div class="input-section">
+                                <label>{{ $t('Service.Service Title') }}</label>
+                                <div class="input">
+                                    <input type="text" 
+                                        v-model="currentService.title"
+                                        placeholder="domain.com"
+                                        :disabled="!edit">
+                                </div>
+                            </div>
+
+                            <div class="input-actions" v-show="!edit">
+                                <md-copy class="input-action" w="20px" h="20px"></md-copy>
+                            </div>
+                        </div>
                         
+                        <!-- Type -->
+                        <div class="input-block hover">
+                            <div class="input-section">
+                                <label>{{ $t('Service.Service Type') }}</label>
+                                <div class="input-section">
+                                    <Multiselect v-model="currentService.type" 
+                                        :placeholder="$t('Service.Select service type')"
+                                        :options="types.map(type => ({ value: type.name, label: type.name }))"
+                                        :disabled="!edit"/>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Username -->
-                        <div class="input-block">
+                        <div class="input-block hover">
 
                             <div class="input-section">
                                 <label>{{ $t('Service.Username') }}</label>
                                 <div class="input">
-                                    <input type="text" placeholder="username@username.com" :disabled="!edit">
+                                    <input type="text" 
+                                        v-model="currentService.username"
+                                        placeholder="username@username.com"
+                                        :disabled="!edit">
                                 </div>
                             </div>
 
@@ -70,12 +103,15 @@
                         </div>
 
                         <!-- Password -->
-                        <div class="input-block">
+                        <div class="input-block hover">
 
                             <div class="input-section">
                                 <label>{{ $t('Service.Password') }}</label>
                                 <div class="input">
-                                    <input type="password" placeholder="password" :disabled="!edit">
+                                    <input type="password" 
+                                        v-model="currentService.password"
+                                        placeholder="password"
+                                        :disabled="!edit">
                                 </div>
                             </div>
 
@@ -91,18 +127,18 @@
                         </div>
 
                         <!-- Add Field -->
-                        <div class="input-block" v-if="edit">
+                        <div class="input-block" :class="{hover: !addingFieldToggle}" v-if="edit">
 
+                        
                             <!-- Select type -->
-                            <div class="add-field" v-if="addingFieldToggle">
-                                <select v-model="addingFieldType">
-                                    <option value="">{{ $t('Service.Select service type') }}</option>
-                                    <option v-for="(type, typeIndex) in types" 
-                                        :value="type.name" 
-                                        :key="typeIndex">
-                                        {{ type.name }}
-                                    </option>
-                                </select>
+                            <div class="add-field input-section" v-if="addingFieldToggle">
+
+                                <label>{{ $t('Service.Field Type') }}</label>
+
+                                <Multiselect v-model="addingFieldType" 
+                                    :placeholder="$t('Service.Select field type')"
+                                    :options="fieldTypes.map(type => ({ value: type, label: type }))"/>
+
                             </div>
 
                             <!-- Add -->
@@ -123,8 +159,8 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex';
-import { IService } from '@/store/service';
+import { mapActions, mapMutations, mapState } from 'vuex';
+import Multiselect from '@vueform/multiselect'
 
 import MdCreate from 'vue-ionicons/dist/md-create.vue';
 import MdTrash from 'vue-ionicons/dist/md-trash.vue';
@@ -138,9 +174,6 @@ import MdAdd from 'vue-ionicons/dist/md-add.vue';
 
 import Permission from './Permission.vue';
 
-import { Vue } from 'vue-class-component'
-import Component from 'vue-class-component';
-
 export default {
     components: {
         MdCreate,
@@ -153,25 +186,40 @@ export default {
         MdClose,
         MdAdd,
         Permission,
+        Multiselect
     },
     data() {
         return {
             edit: false,
             addingFieldToggle: false,
-            addingFieldType: ''
+            addingFieldType: '',
+            serviceSaving: false,
         }
     },
     computed: {
-        ...mapState('service', ['currentService'])
+        ...mapState('service', ['currentService', 'types'])
     },
     methods: {
-        ...mapMutations('service', ['toggleServiceFavorite']),
+        ...mapActions('service', ['favoriteService', 'removeService']),
 
-        editService() {
+        editService(service) {
+            this.oldService = Object.assign({}, service);
             this.edit = true;
         },
         success(event) {
             event.trigger.classList.add('success');
+        },
+        saveService(service) {
+            this.serviceSaving = true;
+            this.$store.dispatch('service/saveService', service).then(response => {
+
+            }).finally(() => {
+                this.serviceSaving = false;
+            });
+        },
+        revertService(service) {
+            this.edit = false;
+            //this.$store.commit('service/setService', this.oldservice);
         }
     }
 }
@@ -260,6 +308,7 @@ export default {
             .service-header-title {
                 font-size: $font-size-h1;
                 color: $color-text-prm;
+                transition: all $transition-time;
             }
 
             .service-header-type {
@@ -326,7 +375,7 @@ export default {
         }
     }
 
-    &:hover {
+    &.hover:hover {
         background-color: $color-menu;
     }
 
@@ -377,8 +426,8 @@ export default {
     /* Add field */
     .add-field {
         display: flex;
+        width: 100%;
         height: 100%;
-        align-items: center;
         text-align: left;
         justify-content: left;
         color: $color-text-sec;

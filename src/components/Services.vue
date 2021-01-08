@@ -19,7 +19,7 @@
         </div>
 
         <!-- List -->
-        <div class="services-list" v-animated-filter="searchText">
+        <div class="services-list" v-if="services && services.length" v-animated-filter="searchText">
 
             <div class="service-card draggable" 
                 :class="{show: service.show, opened: service.opened}" 
@@ -44,6 +44,12 @@
             </div>
 
         </div>
+
+        <!-- No added -->
+        <div class="services-empty" v-if="!services || !services.length">
+            <h1>{{ $t('Services.There are no services added yet') }}</h1>
+        </div>
+
     </div>
 </template>
 
@@ -76,15 +82,22 @@ export default {
             });
         }
     },
+    mounted() {
+        this.getServices();
+    },
     methods: {
+        getServices() {
+            this.$store.dispatch('service/getServices');
+        },
         openService(service) {
             this.$router.push('/' + service.id);
             this.$store.commit('service/setCurrentService', service);
         },
         createService() {
             const service = {
-                id: 1,
-                title: ''
+                _id: 1,
+                title: '',
+                type: 'apache2'
             };
             this.$store.commit('service/setCurrentService', service);
         },
@@ -185,6 +198,16 @@ $services-header-height: 64px;
     }
 
     /* List */
+    .services-empty {
+        h1 {
+            text-align: center;
+            color: $color-text-thr;
+            font-family: $font-prm;
+            font-weight: 300;
+            font-size: $font-size-p1;
+        }
+    }
+
     .services-list {
         flex: 1;
         width: calc(100% - 16px);

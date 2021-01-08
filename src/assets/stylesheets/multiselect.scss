@@ -1,0 +1,72 @@
+/* Select 
+<div class="multiselect">
+    <div class="multiselect-input" tabindex="0">
+        <div class="multiselect-single-label">apache2</div>
+        <div class="multiselect-placeholder" style="display: none;">Select your character</div>
+        <div class="multiselect-spinner" style="display: none;"></div>
+    </div>
+</div>
+*/
+
+
+.multiselect {
+    width: 100%;
+    max-height: 31px;
+
+    .multiselect-input {
+        border-radius: $border-radius;
+        border: 2px solid $color-input-background;
+        font-size: $font-size-p1;
+        max-height: 31px;
+        box-shadow: $box-shadow;
+        color: $color-text-sec;
+        transition: all $transition-time;
+
+        * {
+            transition: all $transition-time;
+        }
+
+        &:focus {
+            border-top-left-radius: $border-radius;
+            border-top-right-radius: $border-radius;
+        }
+    }
+
+    .multiselect-options {
+        overflow-x: hidden;
+        scrollbar-width: thin;
+        border-bottom-left-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+        top: 31px + 8px;
+        background-color: $color-menu;
+        border: 2px solid $color-input-background;
+        transition: all $transition-time;
+        box-shadow: $box-shadow;
+
+        .multiselect-option {
+            color: $color-text-prm;
+            font-size: $font-size-p1;
+            transition: all $transition-time;
+
+            &.is-pointed, &.is-selected {
+                background-color: $color-prm;
+            }
+        }
+    }
+
+    &.is-disabled {
+        .multiselect-input {
+            border: none;
+            background-color: transparent;
+            box-shadow: none;
+
+            &:before {
+                display: none;
+            }
+
+            .multiselect-single-label {
+                padding-left: 8px;
+            }
+        }
+    }
+}

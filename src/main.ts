@@ -12,6 +12,9 @@ import AnimatedFilter from './modules/AnimatedFilter.js';
 // Icons
 require('vue-ionicons/ionicons.css');
 
+// Multiselect
+require('@vueform/multiselect/themes/default.css');
+
 const app = createApp(App);
 app.directive('AnimatedFilter', AnimatedFilter);
 app.use(store);

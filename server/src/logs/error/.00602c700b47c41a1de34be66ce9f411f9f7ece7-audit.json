@@ -1,0 +1,19 @@
+{
+    "keep": {
+        "days": false,
+        "amount": 30
+    },
+    "auditLog": "C:\\Users\\Szotyi\\Documents\\password-manager\\server\\src\\logs\\error\\.00602c700b47c41a1de34be66ce9f411f9f7ece7-audit.json",
+    "files": [
+        {
+            "date": 1610054801475,
+            "name": "C:\\Users\\Szotyi\\Documents\\password-manager\\server\\src\\logs\\error\\2021-01-07.error.log",
+            "hash": "3a850754c67482cb6c37fec5a1659074"
+        },
+        {
+            "date": 1610060464206,
+            "name": "C:\\Users\\Szotyi\\Documents\\password-manager\\server\\src\\logs\\error\\2021-01-08.error.log",
+            "hash": "e675e68774615632976883b860fde0fe"
+        }
+    ]
+}

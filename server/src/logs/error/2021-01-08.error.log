@@ -1,0 +1,4 @@
+2021-01-08 00:51:19 error: StatusCode : 500, Message : Service validation failed: status: Path `status` is required.
+2021-01-08 00:56:54 error: StatusCode : 500, Message : Service validation failed: status: Path `status` is required.
+2021-01-08 00:57:26 error: StatusCode : 409, Message : Service not found
+2021-01-08 00:57:34 error: StatusCode : 500, Message : Service validation failed: status: Path `status` is required.
